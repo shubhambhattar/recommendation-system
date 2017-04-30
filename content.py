@@ -42,7 +42,8 @@ with sqlite3.connect('moviesdb2.sqlite') as conn:
             SELECT movie_id FROM Movies_Genres WHERE genre_id = (?)''',
             (genre_list[i], )).fetchall()
         for value in temp:
-            temp_movie_set.add(value[0])
+            if value[0] not in mov_id:
+                temp_movie_set.add(value[0])
 
     temp_movie_list = list(temp_movie_set)
     # print movie_list
@@ -81,7 +82,7 @@ with sqlite3.connect('moviesdb2.sqlite') as conn:
     nbrs = NearestNeighbors()
     nbrs.fit(train)
     indices = nbrs.kneighbors([[item] for item in mov_rate],
-        n_neighbors=20, return_distance=False)
+        n_neighbors=7, return_distance=False)
 
     print indices
 
