@@ -5,6 +5,7 @@ Recommendation Systems using Machine Learning
 The data is extracted from CSV files. The following tables are formed:
 
 ### Movies
+
 Attributes:
 
 - id: Movie id
@@ -20,7 +21,8 @@ Snapshot of data:
 | 74458 | Shutter Island (2010) | 3.97412   |
 | ...   | ...                   | ...       |
 
-###Genres
+### Genres
+
 Attributes:
 
 - id: Genre id
@@ -36,6 +38,7 @@ Snapshot of data:
 | ...   | ...       |
 
 ### Movies_Genres
+
 Attributes:
 
 - movie_id: movie id
@@ -57,6 +60,7 @@ Snapshot of data:
 
 
 ### Ratings
+
 Attributes:
 
 - user_id: id of the user who has rated the movies
@@ -71,3 +75,15 @@ Snapshot of data:
 | 1         | 1029      | 3.0       |
 | 2         | 17        | 5.0       |
 | ...       | ...       | ...       |
+
+
+## content.py
+
+This is the content based filtering approach. The following things are done:
+
+1. Get a list of favourite movies from the user.
+2. Get the ratings of all the movies liked by the user.
+3. Make an exhaustive Genre set that encompasses all the favourite movies.
+4. Build a movie list that has those genres. Sort the movies in such a way that the movie with most genre match will be on top.
+5. Get the top 50 movies from the above list and apply k-NN to get top `k` movies.
+6. Present the names of the `k` movies in the end result.
