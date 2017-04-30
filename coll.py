@@ -50,6 +50,8 @@ def pearson(user1, user2):
 def cmp(a):
     return a[0]*a[1]/20.0
 
+def cmp2(a):
+    return a[-1]
 
 # Get the number of movies from the user
 print 'Enter the number of movies that you like:'
@@ -91,10 +93,17 @@ for i in xrange(2, users):
 
 # sort the user_coeff list such that the best results are on the top
 user_coeff = sorted(user_coeff, key=cmp, reverse=True)
+# for item in user_coeff:
+#     print item
+
+# `user_coeff_dict` is a dictionary of the following form:
+# `{user_id: pearson_correlation_value}`
+user_coeff_dict = {}
 for item in user_coeff:
-    print item
+    user_coeff_dict[item[2]] = item[0]
 
 # create an exhaustive list of movies for which prediction will be made
+# `movies_list` is of the format `[movie_id, rating, user_id]`
 movies_list = []
 for item in user_coeff[:5]:
     cur.execute('SELECT movie_id, rating FROM Ratings WHERE user_id = (?)', (item[2], ))
@@ -109,3 +118,32 @@ for item in user_coeff[:5]:
                 break
         if flag == False:
             movies_list.append((i[0], i[1], item[2], ))
+
+# `movies_list_dict` is a dictionary of the following form:
+# `{movie_id: [(rating_1, user_id_1), (rating_2, user_id_2)]}`
+movies_list_dict = {}
+for item in movies_list:
+    if item[0] not in movies_list_dict:
+        movies_list_dict[item[0]] = []
+    movies_list_dict[item[0]].append((item[1], item[2], ))
+
+# predicted_movies will store the final list of movies from which a subset will
+# be recommended. `predicted_movies` will have the format:
+# `[movie_id, predicted_rating]`
+predicted_movies = []
+
+# Calculate the predicted rating of a movie using the following formula:
+#          sum(Y_i) - sum(r(X, Y))
+# p(X_i) = -----------------------
+#                     n
+for key, value in movies_list_dict.items():
+    num = sum([x[0] for x in value])
+    num -= sum([user_coeff_dict[x[1]] for x in value])
+    num = round(float(num)/len(value), 5)
+    predicted_movies.append((key, num, ))
+
+# sort the movies with predicted values and display the top 10 results
+predicted_movies = sorted(predicted_movies, key=cmp2, reverse=True)
+for item in predicted_movies[:10]:
+    cur.execute('SELECT movie FROM Movies WHERE id = (?)', (item[0], ))
+    print cur.fetchone()[0]
