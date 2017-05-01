@@ -147,3 +147,5 @@ predicted_movies = sorted(predicted_movies, key=cmp2, reverse=True)
 for item in predicted_movies[:10]:
     cur.execute('SELECT movie FROM Movies WHERE id = (?)', (item[0], ))
     print cur.fetchone()[0]
+
+conn.close()

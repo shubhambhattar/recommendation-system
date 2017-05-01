@@ -88,6 +88,15 @@ This is the content based filtering approach. The following things are done:
 5. Get the top 50 movies from the above list and apply k-NN to get top `k` movies.
 6. Present the names of the `k` movies in the end result.
 
+Content based filtering works by first getting the items the target user is interested in. For each of these item, we find other items that have similar characterstics. An exhaustive list of all such items is created. In our case, we first ask the user for his/her favorite movies. Based on these obtain the following data from the database:
+
+- Average rating of all the movies in favorites list.
+- All the genres of all the movies in favorites list.
+
+After we have all the genres that the target user is interested in, we will get all the movies that fall in any of those genres. Let's assume that the set of genres that the user is interested in is `A`. For all the movies extracted in this step, find out the genres of each of that movie. Let's name this set B. Now, we will sort the list in descending order such that the movie with `A intersection B` value will be on top.
+
+After we have this sorted data, we will extract a few top movies, say 50. This data will be used to apply k-NN algorithm to solve this problem. The training data will be the rating of the rating of the user's favorite movies. The testing data will be the top 50 movies extracted from the database. The top `k` movies found closest to the movies rated by the user will be recommended to the target user.
+
 
 ## coll.py
 
