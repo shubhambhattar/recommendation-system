@@ -128,3 +128,17 @@ Here,
 - ![Y, n](http://latex.codecogs.com/gif.latex?Y%2C%20n) - `Y` consists of all the `n` people who have rated `i`
 
 In this way a final list is created which stored the movie_id and their predicted ratings for the target user. This list is sorted in descending order with respect to predicted ratings and the top few results are displayed.
+
+
+## hybrid.py
+
+This is the Hybrid Filtering approach which is an amalgamation of both Collaborative and Content based filtering approach. Hybrid approach is more dynamic and provides better results than the case when both the other approaches are applied individually. It tries to make up for the deficiencies of one method with the use of the other.
+
+This approach works as follows:
+
+- First we apply the Collaborative filtering approach, to find the users with which the target user is highly correlated.
+- We find out the exhaustive genre set that encompasses all the movies rated by the target user.
+- After we find the correlated users, we find out the movies that are seen by those users but not seen by the target user.
+- This data is stored in a data structure. It will contain `movies_id`, `rating` and `genre_match_with_target_user`.
+- Top few results are used and applies in k-NN just like in Content Based filtering approach.
+- Final results are displayed.

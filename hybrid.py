@@ -132,6 +132,7 @@ for i in xrange(len(user_coeff)):
             movies_list.append((i[0], i[1], len(set(genre_of_movie).intersection(genre_list)), ))
 
 movies_list = sorted(movies_list, key=cmp2, reverse=True)
+movies_list = movies_list[:50]
 
 # create a training dataset and find the k nearest neighbors.
 training_data = [[item[1]] for item in movies_list]
